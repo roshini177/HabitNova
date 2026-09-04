@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HabitNova Splash</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top, #1b2a3a, #0b1118);
+    color: white;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.splash-container {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+/* Logo */
+.logo {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    border-radius: 14px;
+    background: #1da1f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    color: #0b1118;
+}
+
+/* Title */
+.title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.title span {
+    color: #1da1f2;
+}
+
+/* Subtitle */
+.subtitle {
+    font-size: 0.85rem;
+    color: #9aa4af;
+    margin-bottom: 36px;
+}
+
+/* Loading Text */
+.loading-text {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: #9aa4af;
+    margin-bottom: 10px;
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #1a1f27;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #1da1f2;
+    transition: width 0.2s ease;
+}
+
+/* Percent */
+.percent {
+    font-size: 0.7rem;
+    color: #9aa4af;
+    margin-top: 6px;
+}
+
+/* Skip Button */
+.skip {
+    position: fixed;
+    bottom: 22px;
+    right: 24px;
+    font-size: 0.7rem;
+    color: #9aa4af;
+    cursor: pointer;
+}
+
+.skip:hover {
+    color: white;
+}
+
+/* Larger screens */
+@media (min-width: 768px) {
+    .title {
+        font-size: 2.2rem;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="splash-container">
+    <div class="logo">🔥</div>
+
+    <div class="title">Habit<span>Nova</span></div>
+    <div class="subtitle">Premium momentum for your daily habits.</div>
+
+    <div class="loading-text">INITIALIZING FLOW</div>
+
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="percent" id="percent">0% Complete</div>
+</div>
+
+<div class="skip" onclick="finishLoading()">Skip Animation →</div>
+
+<script>
+let value = 0;
+const progress = document.getElementById("progress");
+const percent = document.getElementById("percent");
+
+let timer = setInterval(() => {
+    value += Math.random() * 3;
+
+    if (value >= 100) {
+        value = 100;
+        clearInterval(timer);
+        setTimeout(finishLoading, 400);
+    }
+
+    progress.style.width = value + "%";
+    percent.innerText = Math.floor(value) + "% Complete";
+}, 60);
+
+function finishLoading() {
+    clearInterval(timer);
+    progress.style.width = "100%";
+    percent.innerText = "100% Complete";
+
+    setTimeout(() => {
+        window.location.href = 'welcome.html';
+    }, 400);
+}
+</script>
+
+</body>
+</html>

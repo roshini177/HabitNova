@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HabitNova | Create</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #06b6d4; --bg: #050505; }
+        body.company-theme { --primary: #818cf8; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: #fff; display: flex; height: 100vh; }
+        
+        .sidebar { width: 90px; background: #000; border-right: 1px solid #111; display: flex; flex-direction: column; align-items: center; padding: 40px 0; }
+        .sidebar nav a { color: #333; text-decoration: none; margin-bottom: 35px; font-size: 22px; display: block; }
+        .sidebar nav a.active { color: var(--primary); }
+
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .form-card { background: #0c0c0c; padding: 40px; border-radius: 24px; border: 1px solid #111; width: 400px; }
+        
+        label { display: block; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 700; }
+        input, select { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 12px; margin-bottom: 20px; outline: none; }
+        .save-btn { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 12px; font-weight: bold; cursor: pointer; color: #000; transition: 0.3s; }
+        .save-btn:hover { transform: scale(1.02); opacity: 0.9; }
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <nav>
+        <a href="dashboard.html">🏠</a>
+        <a href="calendar.html">🌿</a>
+        <a href="analytics.html">📊</a>
+        <a href="add-habit.html" class="active">⚙️</a>
+    </nav>
+</aside>
+<main class="main-content">
+    <div class="form-card">
+        <h2 style="font-weight: 300; margin-bottom: 25px;">Initialize Mission</h2>
+        
+        <label>Mission Name</label>
+        <input type="text" id="h-name" placeholder="e.g. Daily LeetCode">
+        
+        <label>Category</label>
+        <select id="h-cat" onchange="toggleCustom(this.value)"></select>
+        
+        <div id="custom-wrap" style="display:none;">
+            <label>Custom Category Name</label>
+            <input type="text" id="custom-cat" placeholder="Enter category...">
+        </div>
+
+        <button class="save-btn" onclick="save()">SAVE TO CORE</button>
+    </div>
+</main>
+<script>
+    const mode = localStorage.getItem("habitnova_mode") || "personal";
+    if(mode === 'company') document.body.classList.add('company-theme');
+
+    // Load specific categories based on user's mode
+    const cats = mode === 'personal' ? ['fitness', 'mindset', 'health'] : ['project', 'skills', 'work'];
+    const select = document.getElementById('h-cat');
+    select.innerHTML = cats.map(c => `<option value="${c}">${c.toUpperCase()}</option>`).join('') + '<option value="custom">+ ADD CUSTOM</option>';
+
+    function toggleCustom(v) { 
+        document.getElementById('custom-wrap').style.display = (v === 'custom') ? 'block' : 'none'; 
+    }
+
+    function save() {
+        const name = document.getElementById('h-name').value;
+        let cat = document.getElementById('h-cat').value;
+        if(cat === 'custom') cat = document.getElementById('custom-cat').value;
+        
+        if(!name || !cat) { alert("Missing Data"); return; }
+
+        let data = JSON.parse(localStorage.getItem(`habits_${mode}`)) || [];
+        data.push({ id: Date.now(), name, category: cat, completed: false });
+        localStorage.setItem(`habits_${mode}`, JSON.stringify(data));
+        window.location.href = 'dashboard.html';
+    }
+</script>
+</body>
+</html>

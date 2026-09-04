@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HabitNova | Milestone Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #06b6d4; --bg: #050505; --accent: #22c55e; --card: #111; --warning: #f59e0b; }
+        body.company-theme { --primary: #818cf8; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: #fff; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar Navigation */
+        .sidebar { width: 80px; background: #000; border-right: 1px solid #111; display: flex; flex-direction: column; align-items: center; padding: 30px 0; }
+        .sidebar a { color: #444; text-decoration: none; margin-bottom: 35px; font-size: 22px; transition: 0.3s; }
+        .sidebar a.active { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+        /* Journey Path */
+        .content { flex: 1; padding: 60px; overflow-y: scroll; scroll-behavior: smooth; transition: 0.5s; }
+        .content.shrunk { margin-right: 400px; opacity: 0.2; pointer-events: none; }
+
+        .header-section { text-align: center; margin-bottom: 60px; }
+        .header-section h2 { font-weight: 300; letter-spacing: 8px; font-size: 28px; color: var(--primary); }
+        .header-section p { color: #444; font-size: 12px; margin-top: 10px; font-weight: 600; }
+
+        .timeline { position: relative; max-width: 500px; margin: 0 auto; border-left: 1px solid #1a1a1a; padding-left: 40px; }
+        .node { position: relative; margin-bottom: 45px; cursor: pointer; transition: 0.3s; }
+        
+        .node-circle { 
+            position: absolute; left: -56px; top: 5px; width: 30px; height: 30px; 
+            background: #000; border: 1px solid #333; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 10px; z-index: 2; font-weight: bold;
+            transition: all 0.4s ease;
+        }
+
+        /* Status Colors */
+        .node.perfect .node-circle { border-color: var(--accent); background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
+        .node.partial .node-circle { border-color: var(--warning); background: rgba(245, 158, 11, 0.1); color: var(--warning); box-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+        .node.failed .node-circle { border-color: #ef4444; color: #ef4444; }
+        .node.future .node-circle { border-color: #222; color: #333; border-style: dashed; }
+        .node.active .node-circle { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); transform: scale(1.1); }
+
+        .node-box { background: rgba(255,255,255,0.01); padding: 18px; border-radius: 12px; border: 1px solid transparent; transition: 0.3s; }
+        .node:hover .node-box { border-color: #333; background: rgba(255,255,255,0.04); }
+
+        /* Detail Panel */
+        .detail-panel { 
+            position: fixed; right: -400px; top: 0; width: 400px; height: 100vh; 
+            background: #080808; border-left: 1px solid #1a1a1a; padding: 50px; 
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); z-index: 100;
+            overflow-y: auto;
+        }
+        .detail-panel.open { right: 0; }
+
+        .impact-pill { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 10px; font-weight: 800; margin-top: 10px; letter-spacing: 1px; }
+        .pill-green { background: rgba(34, 197, 94, 0.1); color: var(--accent); }
+        .pill-orange { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        
+        .close-btn { background: none; border: none; color: #444; cursor: pointer; font-size: 12px; margin-bottom: 40px; letter-spacing: 2px; }
+        .close-btn:hover { color: #fff; }
+
+        /* Toggle Switch UI */
+        .switch { position: relative; display: inline-block; width: 34px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #222; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(14px); }
+    </style>
+</head>
+<body id="body-tag">
+
+<aside class="sidebar">
+    <a href="dashboard.html">🏠</a>
+    <a href="calendar.html" class="active">🌿</a>
+    <a href="analytics.html">📊</a>
+    <a href="add-habit.html">⚙️</a>
+</aside>
+
+<main class="content" id="main-scroll">
+    <div class="header-section">
+        <h2 id="month-year-display">FEBRUARY 2026</h2>
+        <p id="mode-subtitle">PERSONAL PROGRESS JOURNEY</p>
+    </div>
+    <div class="timeline" id="journey-path"></div>
+</main>
+
+<div class="detail-panel" id="detail-side">
+    <button class="close-btn" onclick="closeLog()">CLOSE ARCHIVE —</button>
+    <div id="log-content">
+        <span style="font-size: 10px; color: var(--primary); letter-spacing: 3px; font-weight: bold;">MILESTONE REPORT</span>
+        <h1 id="log-date" style="font-size: 36px; margin: 15px 0; font-weight: 300;">Feb 01</h1>
+        <div id="log-impact-pill" class="impact-pill">CO2 OFFSET: 0.00KG</div>
+        
+        <div style="margin-top: 50px;">
+            <h4 style="color: #333; margin-bottom: 25px; font-size: 11px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; letter-spacing: 2px;">HABIT SYNC DATA</h4>
+            <div id="log-tasks"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const now = new Date();
+    const currentMonth = now.toLocaleString('default', { month: 'long' }).toUpperCase();
+    const currentYear = now.getFullYear();
+    const today = now.getDate();
+
+    const mode = localStorage.getItem("habitnova_mode") || "personal";
+    let habits = JSON.parse(localStorage.getItem(`habits_${mode}`) || '[]');
+    
+    document.getElementById('month-year-display').innerText = `${currentMonth} ${currentYear}`;
+    if(mode === 'company') {
+        document.getElementById('body-tag').classList.add('company-theme');
+        document.getElementById('mode-subtitle').innerText = "CORPORATE EFFICIENCY LOG";
+    }
+
+    // UPDATED: Function to determine real status
+    function getHistoryForDay(day) {
+        if (day > today) return { type: 'future', tasks: [] };
+        
+        // For today, we use the live habits array
+        const doneCount = habits.filter(t => t.completed).length;
+        const totalCount = habits.length;
+
+        if (day === today) {
+            let type = 'active';
+            if (totalCount > 0) {
+                if (doneCount === totalCount) type = 'perfect';
+                else if (doneCount > 0) type = 'partial';
+            }
+            return { type: type, tasks: habits };
+        }
+        
+        // For history (Days before today), we simulate or pull from a real history DB
+        // Keeping your logic for historical visualization
+        const rand = Math.random();
+        if (rand > 0.6) return { type: 'perfect', tasks: habits.map(h => ({...h, completed: true})) };
+        if (rand > 0.2) return { type: 'partial', tasks: habits.map((h, i) => ({...h, completed: i % 2 === 0})) };
+        return { type: 'failed', tasks: habits.map(h => ({...h, completed: false})) };
+    }
+
+    function buildJourney() {
+        const path = document.getElementById('journey-path');
+        path.innerHTML = ''; // Clear for refresh
+        const daysInMonth = new Date(currentYear, now.getMonth() + 1, 0).getDate();
+
+        for (let i = 1; i <= daysInMonth; i++) {
+            const history = getHistoryForDay(i);
+            const node = document.createElement('div');
+            node.className = `node ${history.type}`;
+            node.id = `node-${i}`;
+            
+            node.innerHTML = `
+                <div class="node-circle">${i}</div>
+                <div class="node-box">
+                    <p style="font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">${currentMonth.substring(0,3)} ${i}, ${currentYear}</p>
+                    <p id="status-text-${i}" style="color: #444; font-size: 10px; letter-spacing: 1px; margin-top: 4px;">
+                        ${i === today ? (history.type === 'active' ? 'CURRENT MILESTONE' : history.type.toUpperCase() + ' LOG') : history.type.toUpperCase() + ' LOG'}
+                    </p>
+                </div>
+            `;
+            node.onclick = () => openLog(i, history);
+            path.appendChild(node);
+        }
+    }
+
+    function toggleHabit(index, day) {
+        if (day !== today) return; // Only allow toggling for today
+
+        habits[index].completed = !habits[index].completed;
+        localStorage.setItem(`habits_${mode}`, JSON.stringify(habits));
+        
+        // Refresh the detail panel view
+        const history = getHistoryForDay(day);
+        updateLogView(day, history);
+        
+        // Refresh the specific node in the timeline without re-scrolling
+        const node = document.getElementById(`node-${day}`);
+        const statusText = document.getElementById(`status-text-${day}`);
+        node.className = `node ${history.type}`;
+        statusText.innerText = history.type === 'perfect' ? 'PERFECT LOG' : (history.type === 'partial' ? 'PARTIAL LOG' : 'CURRENT MILESTONE');
+    }
+
+    function updateLogView(day, history) {
+        const pill = document.getElementById('log-impact-pill');
+        const taskContainer = document.getElementById('log-tasks');
+        
+        const doneCount = history.tasks.filter(t => t.completed).length;
+        const totalCount = history.tasks.length;
+        const impact = (doneCount * 0.45).toFixed(2);
+
+        if (history.type === 'future') {
+            pill.className = "impact-pill";
+            pill.style.background = "#1a1a1a";
+            pill.innerText = "UPCOMING MILESTONE";
+            taskContainer.innerHTML = "<p style='color:#333; font-size: 12px;'>Data will sync upon arrival at this date.</p>";
+        } else {
+            pill.className = `impact-pill ${doneCount === totalCount && totalCount > 0 ? 'pill-green' : 'pill-orange'}`;
+            pill.innerText = `ECO OFFSET: ${impact}KG CO2`;
+            
+            taskContainer.innerHTML = history.tasks.length > 0 ? history.tasks.map((h, i) => `
+                <div style="padding: 18px; background: #0c0c0c; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1a1a1a; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <span style="font-size: 13px; color: ${h.completed ? '#fff' : '#444'}">${h.name}</span>
+                        <div style="height: 2px; width: 40px; background: ${h.completed ? 'var(--accent)' : '#1a1a1a'}; margin-top: 10px; opacity: 0.5;"></div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" ${h.completed ? 'checked' : ''} onchange="toggleHabit(${i}, ${day})">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            `).join('') : "<p style='color:#444; font-size: 12px;'>No active habits tracked for this period.</p>";
+        }
+    }
+
+    function openLog(day, history) {
+        const panel = document.getElementById('detail-side');
+        const content = document.getElementById('main-scroll');
+        panel.classList.add('open');
+        content.classList.add('shrunk');
+
+        const monthShort = currentMonth.substring(0,3);
+        document.getElementById('log-date').innerText = `${monthShort} ${day}`;
+        
+        updateLogView(day, history);
+    }
+
+    function closeLog() {
+        document.getElementById('detail-side').classList.remove('open');
+        document.getElementById('main-scroll').classList.remove('shrunk');
+    }
+
+    buildJourney();
+</script>
+</body>
+</html>
