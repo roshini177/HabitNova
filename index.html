@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitNova - Habit Tracker</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 25px;
+            font-weight: 600;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 8%;
+            gap: 40px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #4f46e5;
+        }
+
+        .hero p {
+            font-size: 19px;
+            line-height: 1.7;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 50px 8%;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            margin: 15px 0 10px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #111827;
+            color: white;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">HabitNova</div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="calendar.html">Calendar</a>
+            <a href="analytics.html">Analytics</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+
+        <div class="hero-content">
+            <h1>Build Better Habits with <span>HabitNova</span></h1>
+
+            <p>
+                Track your daily habits, monitor your progress,
+                analyze your performance and build a healthier
+                and more productive lifestyle.
+            </p>
+
+            <a href="dashboard.html" class="btn">Get Started</a>
+        </div>
+
+        <div style="font-size: 150px;">
+            📅
+        </div>
+
+    </section>
+
+    <section class="features">
+
+        <div class="card">
+            <div style="font-size: 45px;">✅</div>
+            <h3>Track Habits</h3>
+            <p>
+                Easily create and track your daily habits
+                and maintain consistency.
+            </p>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 45px;">📊</div>
+            <h3>View Analytics</h3>
+            <p>
+                Understand your habit performance using
+                simple analytics and progress information.
+            </p>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 45px;">📅</div>
+            <h3>Calendar</h3>
+            <p>
+                View your completed habits and maintain
+                your daily routine through the calendar.
+            </p>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>© 2026 HabitNova | Habit Tracking System</p>
+    </footer>
+
+</body>
+</html>
